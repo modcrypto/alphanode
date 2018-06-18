@@ -1,6 +1,6 @@
 Anonymized transactions using coin mixing technology. 1-Second-Transactions. Network stability with masternodes, each is secured with a collateral of 10.000 ALN.
 
-For further information visit us at [alphanode.org](https://alphanode.org/) or visit our ANN thread at [BitcoinTalk](https://bitcointalk.org/index.php?topic=3133202.0)
+For further information visit us at [alphanode.online](https://alphanode.online/) or visit our ANN thread at [BitcoinTalk](https://bitcointalk.org/index.php?topic=3133202.0)
 
 # Coin Specs
 

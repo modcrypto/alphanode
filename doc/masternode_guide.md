@@ -18,7 +18,7 @@ After the setup is complete, this wallet doesn't have to run 24/7 and will be th
 
 ### 1. Install and open the Alphanode-Qt wallet on your machine.
 
-#### i.    Download the newest alphanode-{version}-{OS}.zip wallet from https://github.com/alphanode/alphanode/releases
+#### i.    Download the newest alphanode-{version}-{OS}.zip wallet from https://github.com/modcrypto/alphanode/releases
 #### ii.   Extract the alphanode-qt.exe from alphanode-{version}-{OS}.zip (e.g. for Windows)
 #### iii.  Start the new alphanode-qt.exe
 #### iv.   Click Run if you get a warning about an unverified publisher:
@@ -178,7 +178,7 @@ If you are running the MasterNode server in Amazon AWS or another place where ad
 
 
 
-### 5. Install the Alphanode CLI wallet. Always download the latest [release available](https://github.com/alphanode/alphanode/releases). The file will be alphanode.zip. Next, unpack it
+### 5. Install the Alphanode CLI wallet. Always download the latest [release available](https://github.com/modcrypto/alphanode/releases). The file will be alphanode.zip. Next, unpack it
 
 If you are already running a `alphanoded` on your server and want to upgrade it, stop the current one with:
 ```
@@ -193,7 +193,7 @@ For **Ubuntu 16.04***
 
 ```
 sudo apt-get install libzmq3-dev libminiupnpc-dev -y
-wget https://github.com/alphanode/alphanode/releases/download/v2.1.0/alphanode-2.1.0-x86_64-linux-gnu.tar.gz
+wget https://github.com/modcrypto/alphanode/releases/download/v2.1.0/alphanode-2.1.0-x86_64-linux-gnu.tar.gz
 tar -zxvf alphanode-2.1.0-x86_64-linux-gnu.tar.gz
 rm alphanode-2.1.0-x86_64-linux-gnu.tar.gz
 chmod +x ./alphanode-2.1.0/bin/alphanoded

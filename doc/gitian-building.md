@@ -281,7 +281,7 @@ Clone the git repositories for alphanode and gitian and then checkout the alphan
 
 ```bash
 git clone https://github.com/devrandom/gitian-builder.git
-git clone https://github.com/ALPHANODE/Alphanode.git
+git clone https://github.com/modcrypto/alphanode.git
 cd alphanode
 git checkout v${VERSION}
 cd ..
@@ -350,7 +350,7 @@ Output from `gbuild` will look something like
     remote: Total 35606 (delta 0), reused 0 (delta 0)
     Receiving objects: 100% (35606/35606), 26.52 MiB | 4.28 MiB/s, done.
     Resolving deltas: 100% (25724/25724), done.
-    From https://github.com/ALPHANODE/Alphanode
+    From https://github.com/modcrypto/alphanode
     ... (new tags, new branch etc)
     --- Building for precise x86_64 ---
     Stopping target if it is up
@@ -377,7 +377,7 @@ and inputs.
 
 For example:
 ```bash
-URL=https://github.com/ALPHANODE/Alphanode
+URL=https://github.com/modcrypto/alphanode
 COMMIT=b616fb8ef0d49a919b72b0388b091aaec5849b96
 ./bin/gbuild --commit alphanode=${COMMIT} --url alphanode=${URL} ../alphanode/contrib/gitian-descriptors/gitian-linux.yml
 ./bin/gbuild --commit alphanode=${COMMIT} --url alphanode=${URL} ../alphanode/contrib/gitian-descriptors/gitian-win.yml

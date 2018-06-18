@@ -22,7 +22,7 @@ packages:
 - "ca-certificates"
 - "python"
 remotes:
-- "url": "https://github.com/alphanode/alphanode.git"
+- "url": "https://github.com/modcrypto/alphanode.git"
   "dir": "alphanode"
 files: []
 script: |

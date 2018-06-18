@@ -53,16 +53,19 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 //   (no blocks before with a timestamp after, none after with
 //    timestamp before)
 // + Contains no strange transactions
+// UpdateTip: new best=0000000000079c5843336381d9a1def7b9622b228dac48f8b1a46cb853e5db53  height=130000  log2_work=59.310198  tx=136190  date=2018-06-18 16:15:46 progress=0.999995  cache=281
+
 
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
     (51, uint256("0x000003a43da1ea05032f72414feae68788d07d75876282cc84850171fdcbecaf"))
     (300, uint256("0x0000009c1267652369fab9f0101add92851ef4d8ba3e32674efcbb73e78973f3"))
+    (130000,uint256("0x0000000000079c5843336381d9a1def7b9622b228dac48f8b1a46cb853e5db53"))
 ;
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1521122126, // * UNIX timestamp of last checkpoint block
-    304,    // * total number of transactions between genesis and last checkpoint
+    1529338546, // * UNIX timestamp of last checkpoint block
+    136190,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     1200        // * estimated number of transactions per day after checkpoint
 };
@@ -137,8 +140,10 @@ public:
         assert(genesis.hashMerkleRoot == uint256("0x7b2ba00dcc56e546cc68ac075da770a83e8b8300f9bf435473b889dbae605192"));
         
 
-        vSeeds.push_back(CDNSSeedData("89.163.252.168", "89.163.252.168"));
-	vSeeds.push_back(CDNSSeedData("213.202.218.182", "213.202.218.182"));
+        vSeeds.push_back(CDNSSeedData("alphanode.online", "173.249.9.82"));
+	    vSeeds.push_back(CDNSSeedData("alphanode.online", "178.238.224.253"));
+	    vSeeds.push_back(CDNSSeedData("alphanode.online", "178.238.236.116"));
+	    vSeeds.push_back(CDNSSeedData("alphanode.online", "173.249.41.184"));
         //vFixedSeeds.clear();
         //vSeeds.clear();
 
