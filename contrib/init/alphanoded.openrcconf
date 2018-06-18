@@ -1,0 +1,26 @@
+# /etc/conf.d/alphanoded: config file for /etc/init.d/alphanoded
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/alphanode/alphanode.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/alphanoded"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/alphanoded.pid"
+
+# Where to write alphanoded data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/alphanoded"
+
+# User and group to own alphanoded process
+#BITCOIND_USER="alphanode"
+#BITCOIND_GROUP="alphanode"
+
+# Path to alphanoded executable
+#BITCOIND_BIN="/usr/bin/alphanoded"
+
+# Nice value to run alphanoded under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""

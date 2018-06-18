@@ -1,0 +1,20 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="bg">locale/alphanode_bg.qm</file>
+        <file alias="de">locale/alphanode_de.qm</file>
+        <file alias="en">locale/alphanode_en.qm</file>
+        <file alias="es">locale/alphanode_es.qm</file>
+        <file alias="fi">locale/alphanode_fi.qm</file>
+        <file alias="fr">locale/alphanode_fr.qm</file>
+        <file alias="it">locale/alphanode_it.qm</file>
+        <file alias="ja">locale/alphanode_ja.qm</file>
+        <file alias="pl">locale/alphanode_pl.qm</file>
+        <file alias="pt">locale/alphanode_pt.qm</file>
+        <file alias="ru">locale/alphanode_ru.qm</file>
+        <file alias="sk">locale/alphanode_sk.qm</file>
+        <file alias="sv">locale/alphanode_sv.qm</file>
+        <file alias="vi">locale/alphanode_vi.qm</file>
+        <file alias="zh_CN">locale/alphanode_zh_CN.qm</file>
+        <file alias="zh_TW">locale/alphanode_zh_TW.qm</file>
+    </qresource>
+</RCC>

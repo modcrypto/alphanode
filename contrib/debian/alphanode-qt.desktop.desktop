@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=ALN
+Comment=ALN P2P Cryptocurrency
+Exec=alphanode-qt %u
+Terminal=false
+Type=Application
+Icon=alphanode128
+MimeType=x-scheme-handler/alphanode;
+Categories=Office;Finance;
+Name[en_US]=alphanode-qt.desktop
