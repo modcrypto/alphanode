@@ -287,6 +287,15 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sph_skein.h \
   crypto/sph_types.h
 
+# lyra2z
+crypto_libbitcoin_crypto_a_SOURCES += \
+  crypto/lyra2z/lyra2.c \
+  crypto/lyra2z/lyra2.h \
+  crypto/lyra2z/lyra2z.c \
+  crypto/lyra2z/lyra2z.h \
+  crypto/lyra2z/sponge.c \
+  crypto/lyra2z/sponge.h
+
 # univalue JSON library
 univalue_libbitcoin_univalue_a_SOURCES = \
   univalue/univalue.cpp \

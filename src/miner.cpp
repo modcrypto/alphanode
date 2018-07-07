@@ -85,9 +85,13 @@ public:
 void UpdateTime(CBlockHeader* pblock, const CBlockIndex* pindexPrev)
 {
     pblock->nTime = std::max(pindexPrev->GetMedianTimePast() + 1, GetAdjustedTime());
-
+    
+       // We need to AllowMinDifficultyBlocks for the first algochange block.
+    bool inForkProcess =  (pindexPrev->nTime <= SOFTFORK1_TIME+60) && (pblock->nTime >= SOFTFORK1_TIME); 
+ 
+    
     // Updating time can change work required on testnet:
-    if (Params().AllowMinDifficultyBlocks())
+    if (Params().AllowMinDifficultyBlocks() || inForkProcess)
         pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
 }
 
@@ -539,6 +543,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
         //
         int64_t nStart = GetTime();
         uint256 hashTarget = uint256().SetCompact(pblock->nBits);
+        
         while (true) {
             unsigned int nHashesDone = 0;
 

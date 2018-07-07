@@ -33,7 +33,7 @@ void CActiveMasternode::ManageStatus()
         pmn = mnodeman.Find(pubKeyMasternode);
         if (pmn != NULL) {
             pmn->Check();
-            if (pmn->IsEnabled() && pmn->protocolVersion == PROTOCOL_VERSION) EnableHotColdMasterNode(pmn->vin, pmn->addr);
+            if (pmn->IsEnabled() && isValidProtocol(pmn->protocolVersion)) EnableHotColdMasterNode(pmn->vin, pmn->addr);
         }
     }
 
@@ -65,13 +65,13 @@ void CActiveMasternode::ManageStatus()
         }
 
         if (Params().NetworkID() == CBaseChainParams::MAIN) {
-            if (service.GetPort() != 2214) {
-                notCapableReason = strprintf("Invalid port: %u - only 2214 is supported on mainnet.", service.GetPort());
+            if (service.GetPort() != PROTOCOL_P2P_PORT) {
+                notCapableReason = strprintf("Invalid port: %u - only %d is supported on mainnet.", service.GetPort(), PROTOCOL_P2P_PORT);
                 LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
                 return;
             }
-        } else if (service.GetPort() == 2214) {
-            notCapableReason = strprintf("Invalid port: %u - 2214 is only supported on mainnet.", service.GetPort());
+        } else if (service.GetPort() == PROTOCOL_P2P_PORT) {
+            notCapableReason = strprintf("Invalid port: %u - %d is only supported on mainnet.", service.GetPort(),PROTOCOL_P2P_PORT);
             LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
             return;
         }
@@ -264,13 +264,13 @@ bool CActiveMasternode::Register(std::string strService, std::string strKeyMaste
 
     CService service = CService(strService);
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (service.GetPort() != 2214) {
-            errorMessage = strprintf("Invalid port %u for masternode %s - only 2214 is supported on mainnet.", service.GetPort(), strService);
+        if (service.GetPort() != PROTOCOL_P2P_PORT) {
+            errorMessage = strprintf("Invalid port %u for masternode %s - only %d is supported on mainnet.", service.GetPort(), strService, PROTOCOL_P2P_PORT);
             LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);
             return false;
         }
-    } else if (service.GetPort() == 2214) {
-        errorMessage = strprintf("Invalid port %u for masternode %s - 2214 is only supported on mainnet.", service.GetPort(), strService);
+    } else if (service.GetPort() == PROTOCOL_P2P_PORT) {
+        errorMessage = strprintf("Invalid port %u for masternode %s - %d is only supported on mainnet.", service.GetPort(), strService), PROTOCOL_P2P_PORT;
         LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);
         return false;
     }
@@ -469,7 +469,7 @@ vector<COutput> CActiveMasternode::SelectCoinsMasternode()
 
     // Filter
     BOOST_FOREACH (const COutput& out, vCoins) {
-        if (out.tx->vout[out.i].nValue == Params().MasternodeColleteralLimxDev() * COIN) { //exactly
+        if ( IsValidMasterNodeCollateral(out.tx->vout[out.i].nValue) ) { //exactly   == Params().MasternodeColleteralLimxDev() * COIN
             filteredCoins.push_back(out);
         }
     }

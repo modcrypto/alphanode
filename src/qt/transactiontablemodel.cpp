@@ -330,8 +330,12 @@ QString TransactionTableModel::formatTxType(const TransactionRecord* wtx) const
     switch (wtx->type) {
     case TransactionRecord::RecvWithAddress:
         return tr("Received with");
-    case TransactionRecord::MNReward:
-        return tr("Masternode Reward");
+    case TransactionRecord::MNReward1:
+        return tr("Masternode Reward-1");
+    case TransactionRecord::MNReward2:
+        return tr("Masternode Reward-2");
+    case TransactionRecord::MNReward3:
+        return tr("Masternode Reward-3");
     case TransactionRecord::RecvFromOther:
         return tr("Received from");
     case TransactionRecord::RecvWithDarksend:
@@ -367,8 +371,12 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord* wtx
     case TransactionRecord::Generated:
     case TransactionRecord::StakeMint:
         return QIcon(":/icons/tx_mined");
-    case TransactionRecord::MNReward:
-        return QIcon(":/icons/tx_mn");
+    case TransactionRecord::MNReward1:
+        return QIcon(":/icons/tx_mn1");
+    case TransactionRecord::MNReward2:
+        return QIcon(":/icons/tx_mn2");
+    case TransactionRecord::MNReward3:
+        return QIcon(":/icons/tx_mn3");
     case TransactionRecord::RecvWithDarksend:
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvFromOther:
@@ -393,7 +401,9 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord* wtx, b
     case TransactionRecord::RecvFromOther:
         return QString::fromStdString(wtx->address) + watchAddress;
     case TransactionRecord::RecvWithAddress:
-    case TransactionRecord::MNReward:
+    case TransactionRecord::MNReward1:
+    case TransactionRecord::MNReward2:
+    case TransactionRecord::MNReward3:
     case TransactionRecord::RecvWithDarksend:
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
@@ -418,7 +428,10 @@ QVariant TransactionTableModel::addressColor(const TransactionRecord* wtx) const
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::SendToAddress:
     case TransactionRecord::Generated:
-    case TransactionRecord::MNReward: {
+    case TransactionRecord::MNReward1:
+    case TransactionRecord::MNReward2:
+    case TransactionRecord::MNReward3:
+    {
         QString label = walletModel->getAddressTableModel()->labelForAddress(QString::fromStdString(wtx->address));
         if (label.isEmpty())
             return COLOR_BAREADDRESS;
@@ -493,7 +506,10 @@ QString TransactionTableModel::formatTooltip(const TransactionRecord* rec) const
 {
     QString tooltip = formatTxStatus(rec) + QString("\n") + formatTxType(rec);
     if (rec->type == TransactionRecord::RecvFromOther || rec->type == TransactionRecord::SendToOther ||
-        rec->type == TransactionRecord::SendToAddress || rec->type == TransactionRecord::RecvWithAddress || rec->type == TransactionRecord::MNReward) {
+        rec->type == TransactionRecord::SendToAddress || rec->type == TransactionRecord::RecvWithAddress 
+        || rec->type == TransactionRecord::MNReward1
+        || rec->type == TransactionRecord::MNReward2
+        || rec->type == TransactionRecord::MNReward3) {
         tooltip += QString(" ") + formatTxToAddress(rec, true);
     }
     return tooltip;

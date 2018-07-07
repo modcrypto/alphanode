@@ -205,7 +205,7 @@ int CMasternodeMan::stable_size ()
     int64_t nMasternode_Age = 0;
 
     BOOST_FOREACH (CMasternode& mn, vMasternodes) {
-        if (mn.protocolVersion < nMinProtocol) {
+        if (!isValidProtocol(mn.protocolVersion)) {
             continue; // Skip obsolete versions
         }
         if (IsSporkActive (SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
@@ -900,8 +900,8 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         }
 
         if (Params().NetworkID() == CBaseChainParams::MAIN) {
-            if (addr.GetPort() != 2214) return;
-        } else if (addr.GetPort() == 2214)
+            if (addr.GetPort() != PROTOCOL_P2P_PORT) return;
+        } else if (addr.GetPort() == PROTOCOL_P2P_PORT)
             return;
 
         //search existing Masternode list, this is where we update existing Masternodes with new dsee broadcasts

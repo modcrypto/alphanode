@@ -78,7 +78,7 @@ public:
         SendToAddress,
         SendToOther,
         RecvWithAddress,
-        MNReward,
+        MNReward1,
         RecvFromOther,
         SendToSelf,
         RecvWithDarksend,
@@ -86,7 +86,9 @@ public:
         DarksendCollateralPayment,
         DarksendMakeCollaterals,
         DarksendCreateDenominations,
-        Obfuscated
+        Obfuscated,
+        MNReward2,
+        MNReward3
     };
 
     /** Number of confirmation recommended for accepting a transaction */

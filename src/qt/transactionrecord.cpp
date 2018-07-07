@@ -55,7 +55,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
                     if (IsMine(*wallet, outAddress)) {
                         isminetype mine = wallet->IsMine(wtx.vout[i]);
                         sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-                        sub.type = TransactionRecord::MNReward;
+                        sub.type = TransactionRecord::MNReward1;
                         sub.address = CBitcoinAddress(outAddress).ToString();
                         sub.credit = wtx.vout[i].nValue;
                     }
@@ -97,45 +97,15 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
                 }
 				
 				int nHeight = chainActive.Height();
-				int64_t nSubsidy;
+				int64_t nSubsidy  = GetBlockValue(nHeight);
+                int64_t nMN1  = GetMasternodePayment(nHeight,nSubsidy,1,10000*COIN);
+                int64_t nMN2  = GetMasternodePayment(nHeight,nSubsidy,1,50000*COIN);
+                int64_t nMN3  = GetMasternodePayment(nHeight,nSubsidy,1,100000*COIN);
 				
-				if(nHeight <= 86400 && nHeight > 0) {
-					nSubsidy = 200 * COIN;
-					if(nSubsidy / 100 * 20 == txout.nValue) {
-						sub.type = TransactionRecord::MNReward;
-					}
-				} else if (nHeight > 86400 && nHeight <= 151200) {
-					nSubsidy = 150 * COIN;
-					if(nSubsidy / 100 * 25 == txout.nValue) {
-						sub.type = TransactionRecord::MNReward;
-					}
-				} else if (nHeight > 151200 && nHeight <= 152500) {
-					nSubsidy = 125 * COIN;
-					if(nSubsidy / 100 * 20 == txout.nValue) {
-						sub.type = TransactionRecord::MNReward;
-					}
-				} else if (nHeight > 152500 && nHeight <= 302400) {
-					nSubsidy = 125 * COIN;
-					if(nSubsidy / 100 * 30 == txout.nValue) {
-						sub.type = TransactionRecord::MNReward;
-					}
-				} else if (nHeight > 302400 && nHeight <= 345600) {
-					nSubsidy = 100 * COIN;
-					if(nSubsidy / 100 * 35 == txout.nValue) {
-						sub.type = TransactionRecord::MNReward;
-					}
-				} else if (nHeight > 345600 && nHeight <= 388800) {
-					nSubsidy = 75 * COIN;
-					if(nSubsidy / 100 * 40 == txout.nValue) {
-						sub.type = TransactionRecord::MNReward;
-					}
-				} else if (nHeight > 388800 && nHeight <= 475200) { // 475200 => LAST POW BLOCK
-					nSubsidy = 50 * COIN;
-					if(nSubsidy / 100 * 40 == txout.nValue) {
-						sub.type = TransactionRecord::MNReward;
-					}
-				}
-				
+				if(txout.nValue>=nMN1 &&  txout.nValue<=nMN1+10000000)      sub.type = TransactionRecord::MNReward1;
+				else if(txout.nValue>=nMN2 &&  txout.nValue<=nMN2+10000000) sub.type = TransactionRecord::MNReward2;
+				else if(txout.nValue>=nMN3 &&  txout.nValue<=nMN3+10000000) sub.type = TransactionRecord::MNReward3;
+								
                 parts.append(sub);
             }
         }
@@ -294,7 +264,11 @@ void TransactionRecord::updateStatus(const CWalletTx& wtx)
         }
     }
     // For generated transactions, determine maturity
-    else if (type == TransactionRecord::Generated || type == TransactionRecord::StakeMint || type == TransactionRecord::MNReward) {
+    else if (type == TransactionRecord::Generated || type == TransactionRecord::StakeMint 
+    || type == TransactionRecord::MNReward1
+    || type == TransactionRecord::MNReward2
+    || type == TransactionRecord::MNReward3
+    ) {
         if (wtx.GetBlocksToMaturity() > 0) {
             status.status = TransactionStatus::Immature;
 

@@ -12,9 +12,17 @@
 #include "utilstrencodings.h"
 #include "util.h"
 
+#include "crypto/lyra2z/lyra2z.h"
+
 uint256 CBlockHeader::GetHash() const
 {
-    return HashQuark(BEGIN(nVersion), END(nNonce));
+    uint256 thash;
+    if(nTime > SOFTFORK1_TIME){
+       lyra2z_hash(BEGIN(nVersion), BEGIN(thash));
+       return thash;
+    }else{  
+       return HashQuark(BEGIN(nVersion), END(nNonce));
+    }
 }
 
 uint256 CBlock::BuildMerkleTree(bool* fMutated) const

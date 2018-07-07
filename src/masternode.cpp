@@ -160,19 +160,37 @@ bool CMasternode::UpdateFromNewBroadcast(CMasternodeBroadcast& mnb)
 // Deterministically calculate a given "score" for a Masternode depending on how close it's hash is to
 // the proof of work for that block. The further away they are the better, the furthest will win the election
 // and get paid this block
-//
+// *** UPDATE new algirithms by Nongrain Modcrypto for better result.****
+uint256 CMasternode::CalculateScoreEx(const uint256& blockHash){
+
+    uint256 prime = 2563215569;
+    uint256 aux = (vin.prevout.hash + vin.prevout.n) % prime;
+
+    CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
+    ss << blockHash;
+    uint256 hash2 = ss.GetHash() % prime;
+
+    CHashWriter ss2(SER_GETHASH, PROTOCOL_VERSION);
+    ss2 << blockHash;
+    ss2 << aux;
+    uint256 hash3 = ss2.GetHash() % prime;
+
+    uint256 r = (hash3 > hash2 ? hash3 - hash2 : hash2 - hash3);
+    return r;
+}
+
 uint256 CMasternode::CalculateScore(int mod, int64_t nBlockHeight)
 {
     if (chainActive.Tip() == NULL) return 0;
-
     uint256 hash = 0;
-    uint256 aux = vin.prevout.hash + vin.prevout.n;
-
     if (!GetBlockHash(hash, nBlockHeight)) {
         LogPrintf("CalculateScore ERROR - nHeight %d - Returned 0\n", nBlockHeight);
         return 0;
     }
-
+    if(nBlockHeight > SOFTFORK1_STARTBLOCK){
+       return CalculateScoreEx(hash);
+    }
+    uint256 aux = vin.prevout.hash + vin.prevout.n;
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
     ss << hash;
     uint256 hash2 = ss.GetHash();
@@ -517,8 +535,8 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
     }
 
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (addr.GetPort() != 2214) return false;
-    } else if (addr.GetPort() == 2214)
+        if (addr.GetPort() != PROTOCOL_P2P_PORT) return false;
+    } else if (addr.GetPort() == PROTOCOL_P2P_PORT)
         return false;
 
     //search existing Masternode list, this is where we update existing Masternodes with new mnb broadcasts
@@ -785,4 +803,18 @@ void CMasternodePing::Relay()
 {
     CInv inv(MSG_MASTERNODE_PING, GetHash());
     RelayInv(inv);
+}
+
+CAmount CMasternode::getCollateralValue(){
+    CCoins coins;
+    if(!pcoinsTip->GetCoins(vin.prevout.hash, coins) ||
+           (unsigned int)vin.prevout.n>=coins.vout.size() ||
+           coins.vout[vin.prevout.n].IsNull()) {
+            return 0;
+    }
+    return coins.vout[vin.prevout.n].nValue;
+}
+
+bool IsValidMasterNodeCollateral(CAmount amnt){
+   return (amnt == 10000*COIN) || (amnt == 50000*COIN) || (amnt == 100000*COIN);
 }

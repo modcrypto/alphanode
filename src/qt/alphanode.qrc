@@ -38,6 +38,9 @@
         <file alias="remove">res/icons/remove.png</file>
         <file alias="tx_mined">res/icons/tx_mined.png</file>
         <file alias="tx_mn">res/icons/tx_mn.png</file>
+        <file alias="tx_mn1">res/icons/tx_mn1.png</file>
+        <file alias="tx_mn2">res/icons/tx_mn2.png</file>
+        <file alias="tx_mn3">res/icons/tx_mn3.png</file>
         <file alias="tx_input">res/icons/tx_input.png</file>
         <file alias="tx_output">res/icons/tx_output.png</file>
         <file alias="tx_inout">res/icons/tx_inout.png</file>
@@ -65,14 +68,13 @@
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
         <file alias="alphanode_logo_horizontal">res/images/alphanode_logo_horizontal.png</file>
+        <file alias="alphanode_banner">res/images/alphanode_banner.png</file>
         <file alias="downArrow">res/images/downArrow.png</file>
         <file alias="downArrow_small">res/images/downArrow_small.png</file>
         <file alias="upArrow_small">res/images/upArrow_small.png</file>
         <file alias="leftArrow_small">res/images/leftArrow_small.png</file>
         <file alias="rightArrow_small">res/images/rightArrow_small.png</file>
         <file alias="qtreeview_selected">res/images/qtreeview_selected.png</file>
-        <file alias="walletFrame_bg">res/images/walletFrame_bg.png</file>
-		 <file alias="walletFrame_bgdark">res/images/walletFrame_bgdark.png</file>
         <file alias="walletFrame">res/images/walletFrame.png</file>
         <file alias="splash">res/images/splash.png</file>
         <file alias="splash_testnet">res/images/splash_testnet.png</file>

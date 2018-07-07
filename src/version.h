@@ -11,8 +11,10 @@
 /**
  * network protocol versioning
  */
-
-static const int PROTOCOL_VERSION = 70713;
+static const int SOFTFORK1_STARTBLOCK = 175000;        //143880
+static const int SOFTFORK1_TIME       = 1532736000;    //28-07-2018 00:00:00
+static const int PROTOCOL_P2P_PORT = 2214; // 2214
+static const int PROTOCOL_VERSION = 70714;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
@@ -22,7 +24,8 @@ static const int GETHEADERS_VERSION = 70077;
 
 //! disconnect from peers older than this proto version
 static const int MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT = 70712;
-static const int MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT = 70713;
+static const int MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT  = 70713;
+static const int MIN_PEER_PROTO_VERSION_AFTER_SOFTFORK     = 70714;
 
 //! nTime field added to CAddress, starting with this version;
 //! if possible, avoid requesting addresses nodes older than this

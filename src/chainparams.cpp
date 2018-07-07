@@ -11,6 +11,7 @@
 #include "random.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "version.h"
 
 #include <assert.h>
 
@@ -103,7 +104,7 @@ public:
         pchMessageStart[2] = 0x15;
         pchMessageStart[3] = 0x54;
         vAlertPubKey = ParseHex("0497dfcea626dca270cfe2eebf1160733b07352af966926e30058ca53dae05bbc71d64dbaa0c66e373211e324a23b361fc33e1e2dece1fb90afcefc707643a28f5");
-        nDefaultPort = 2214;
+        nDefaultPort = PROTOCOL_P2P_PORT;
         bnProofOfWorkLimit = ~uint256(0) >> 20; // ALN starting difficulty is 1 / 2^12  //20
         nSubsidyHalvingInterval = 210000;
         nMaxReorganizationDepth = 100;
@@ -112,11 +113,11 @@ public:
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 0;
         nTargetTimespan = 1 * 60; // ALN: 1 day
-        nTargetSpacing = 1 * 60;  // ALN: 1 minute
+        nTargetSpacing = 1 * 60;  // ALN: 1 minute        
         nLastPOWBlock = 475200;
         nMaturity = 110;
         nMasternodeCountDrift = 20;
-	nMasternodeColleteralLimxDev = 10000; //Params().MasternodeColleteralLimxDev()
+	    nMasternodeColleteralLimxDev = 10000; //Params().MasternodeColleteralLimxDev()
         nModifierUpdateBlock = 1; // we use the version 2 for dmd
         nMaxMoneyOut = 100000000 * COIN;
 
@@ -169,7 +170,8 @@ public:
 
 
         nPoolMaxTransactions = 3;
-        strSporkKey = "049e53e687fdafd78fd42d730fad0e7ea1819396176a2cb85d7a76fa4559cdbd2c2f05330a6f5cbadb44a6c1d324f167e679e9f3e95d9d5649761a3e7f59bf4500";
+        //strSporkKey = "049e53e687fdafd78fd42d730fad0e7ea1819396176a2cb85d7a76fa4559cdbd2c2f05330a6f5cbadb44a6c1d324f167e679e9f3e95d9d5649761a3e7f59bf4500";
+        strSporkKey   = "047e3bf198531c8af0450ab20a91bf521fda24ae7ceadcfed7cf169f2b06867eafa374e7ed92d6a2fc7c4c6cffa2673b45867d245439c922bb697432560ca6d6fe";
         strDarksendPoolDummyAddress = "AcmpqXViWUXNroqVNYRdKjKrFM6PNa1oTM";
         nStartMasternodePayments = 1521025200; //03/14/2018 @ 12:00am (UTC)
     }
@@ -178,6 +180,7 @@ public:
     {
         return data;
     }
+    
 };
 static CMainParams mainParams;
 

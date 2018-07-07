@@ -9,16 +9,16 @@
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* Version Build */
-#define CLIENT_VERSION_BUILD 1
+#define CLIENT_VERSION_BUILD 0
 
 /* Version is release */
 #define CLIENT_VERSION_IS_RELEASE true
 
 /* Major version */
-#define CLIENT_VERSION_MAJOR 2
+#define CLIENT_VERSION_MAJOR 3
 
 /* Minor version */
-#define CLIENT_VERSION_MINOR 1
+#define CLIENT_VERSION_MINOR 0
 
 /* Build revision */
 #define CLIENT_VERSION_REVISION 0
@@ -121,7 +121,7 @@
 /* #undef HAVE_GETADDRINFO_A */
 
 /* Define this symbol if you have inet_pton */
-#define HAVE_INET_PTON 1
+/* #undef HAVE_INET_PTON */
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
@@ -274,13 +274,13 @@
 #define LT_OBJDIR ".libs/"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "http://bit.alphanodes"
+#define PACKAGE_BUGREPORT "http://www.alphanode.online"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "Alphanode Core"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Alphanode Core 2.1.0"
+#define PACKAGE_STRING "Alphanode Core 3.0.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "alphanode"
@@ -289,7 +289,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.1.0"
+#define PACKAGE_VERSION "3.0.0"
 
 /* Define to necessary symbol if this constant uses a non-standard name on
    your system. */

@@ -799,8 +799,8 @@ bool isExternal(QString theme)
 {
     if (theme.isEmpty())
         return false;
-
-    return (theme.operator!=("default"));
+    
+    return (theme.operator!=("default") && theme.operator!=("dark") );
 }
 
 // Open CSS when configured
@@ -826,7 +826,7 @@ QString loadStyleSheet()
             settings.setValue("theme", "default");
         }
     }
-
+    LogPrintf("loadStyleSheet %s\n",cssName.toStdString().c_str());
     QFile qFile(cssName);
     if (qFile.open(QFile::ReadOnly)) {
         styleSheet = QLatin1String(qFile.readAll());

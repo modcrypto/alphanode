@@ -20,20 +20,20 @@ static const int STATUSBAR_ICONSIZE = 16;
 static const bool DEFAULT_SPLASHSCREEN = true;
 
 /* Invalid field background style */
-#define STYLE_INVALID "background:#FF8080"
+#define STYLE_INVALID "background:#550000"
 
 /* Transaction list -- unconfirmed transaction */
 #define COLOR_UNCONFIRMED QColor(128, 128, 128)
 /* Transaction list -- negative amount */
-#define COLOR_NEGATIVE QColor(255, 0, 0)
+#define COLOR_NEGATIVE QColor(250, 50, 50)
 /* Transaction list -- bare address (without label) */
-#define COLOR_BAREADDRESS QColor(140, 140, 140)
+#define COLOR_BAREADDRESS QColor(120, 120, 140)
 /* Transaction list -- TX status decoration - open until date */
-#define COLOR_TX_STATUS_OPENUNTILDATE QColor(64, 64, 255)
+#define COLOR_TX_STATUS_OPENUNTILDATE QColor(150, 150, 255)
 /* Transaction list -- TX status decoration - offline */
 #define COLOR_TX_STATUS_OFFLINE QColor(192, 192, 192)
 /* Transaction list -- TX status decoration - default color */
-#define COLOR_BLACK QColor(51, 51, 51)
+#define COLOR_BLACK QColor(240, 240, 240)
 
 /* Tooltips longer than this (in characters) are converted into rich text,
    so that they can be word-wrapped.
@@ -50,7 +50,7 @@ static const int MAX_URI_LENGTH = 255;
 #define SPINNER_FRAMES 35
 
 #define QAPP_ORG_NAME "ALN"
-#define QAPP_ORG_DOMAIN "http://bit.alphanodes/"
+#define QAPP_ORG_DOMAIN "http://www.alphanode.online/"
 #define QAPP_APP_NAME_DEFAULT "ALN-Qt"
 #define QAPP_APP_NAME_TESTNET "ALN-Qt-testnet"
 

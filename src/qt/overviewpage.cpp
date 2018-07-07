@@ -25,9 +25,14 @@
 #include <QSettings>
 #include <QTimer>
 
+#include "json/json_spirit_value.h"
+
 #define DECORATION_SIZE 48
 #define ICON_OFFSET 16
-#define NUM_ITEMS 5
+#define NUM_ITEMS 8
+
+QString theme = "default";
+QColor clBlack = COLOR_BLACK;
 
 class TxViewDelegate : public QAbstractItemDelegate
 {
@@ -57,7 +62,7 @@ public:
         qint64 amount = index.data(TransactionTableModel::AmountRole).toLongLong();
         bool confirmed = index.data(TransactionTableModel::ConfirmedRole).toBool();
         QVariant value = index.data(Qt::ForegroundRole);
-        QColor foreground = COLOR_BLACK;
+        QColor foreground = clBlack;
         if (value.canConvert<QBrush>()) {
             QBrush brush = qvariant_cast<QBrush>(value);
             foreground = brush.color();
@@ -78,7 +83,7 @@ public:
         } else if (!confirmed) {
             foreground = COLOR_UNCONFIRMED;
         } else {
-            foreground = COLOR_BLACK;
+            foreground = clBlack;
         }
         painter->setPen(foreground);
         QString amountText = BitcoinUnits::formatWithUnit(unit, amount, true, BitcoinUnits::separatorAlways);
@@ -87,7 +92,7 @@ public:
         }
         painter->drawText(amountRect, Qt::AlignRight | Qt::AlignVCenter, amountText);
 
-        painter->setPen(COLOR_BLACK);
+        painter->setPen(clBlack);
         painter->drawText(amountRect, Qt::AlignLeft | Qt::AlignVCenter, GUIUtil::dateTimeStr(date));
 
         painter->restore();
@@ -117,6 +122,11 @@ OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
 {
     nDisplayUnit = 0; // just make sure it's not unitialized
     ui->setupUi(this);
+    QSettings settings;
+    theme = settings.value("theme", "default").toString();
+    if(theme=="default"){
+      clBlack = QColor(0, 0, 0);
+    }
 
     // Recent transactions
     ui->listTransactions->setItemDelegate(txdelegate);
@@ -131,20 +141,17 @@ OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
     ui->labelWalletStatus->setText("(" + tr("out of sync") + ")");
     ui->labelDarksendSyncStatus->setText("(" + tr("out of sync") + ")");
     ui->labelTransactionsStatus->setText("(" + tr("out of sync") + ")");
-
-
-	
+ 	
     if (fLiteMode) {
         ui->frameDarksend->setVisible(false);
     } else 
 	{
+
         if (fMasterNode) {
             ui->toggleDarksend->setText("(" + tr("Disabled") + ")");
             ui->DarksendAuto->setText("(" + tr("Disabled") + ")");
             ui->DarksendReset->setText("(" + tr("Disabled") + ")");
             ui->frameDarksend->setEnabled(false);
-			//AAAA Coinmix Tab
-			ui->frameDarksend->setVisible(false);
         } else {
             if (!fEnableDarksend) {
                 ui->toggleDarksend->setText(tr("Start Darksend"));
@@ -152,7 +159,6 @@ OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
                 ui->toggleDarksend->setText(tr("Stop Darksend"));
             }
 			//AAAA Coinmix Tab
-			ui->frameDarksend->setVisible(false);
             timer = new QTimer(this);
             connect(timer, SIGNAL(timeout()), this, SLOT(DarKsendStatus()));
             timer->start(1000);
@@ -160,9 +166,20 @@ OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
     }
 	
 	
+	//AAAA Coinmix Tab
+    ui->frameDarksend->setVisible(false);
+
+    ui->MessageLabel->setVisible(true);
+    ui->MessageLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    ui->MessageLabel->setOpenExternalLinks(true);
+
+    timerMsg = new QTimer(this);
+    connect(timerMsg, SIGNAL(timeout()), this, SLOT(updateInformation()));
+    timerMsg->start(10000);
 
     // start with displaying the "out of sync" warnings
     showOutOfSyncWarning(true);
+    updateInformation();
 }
 
 void OverviewPage::handleTransactionClicked(const QModelIndex& index)
@@ -173,7 +190,7 @@ void OverviewPage::handleTransactionClicked(const QModelIndex& index)
 
 OverviewPage::~OverviewPage()
 {
-	
+	disconnect(timerMsg, SIGNAL(timeout()), this, SLOT(updateInformation()));
     if (!fLiteMode && !fMasterNode) disconnect(timer, SIGNAL(timeout()), this, SLOT(DarKsendStatus()));
     delete ui;
 }
@@ -187,7 +204,7 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     currentWatchOnlyBalance = watchOnlyBalance;
     currentWatchUnconfBalance = watchUnconfBalance;
     currentWatchImmatureBalance = watchImmatureBalance;
-
+    updateInformation();
 
    // ui->labelBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, balance - immatureBalance, false, BitcoinUnits::separatorAlways));
     ui->labelBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, balance, false, BitcoinUnits::separatorAlways));
@@ -547,4 +564,56 @@ void OverviewPage::toggleDarksend()
             dlg.exec();
         }
     }
+}
+
+extern json_spirit::Value GetNetworkHashPS(int lookup, int height);
+extern double GetDifficulty(const CBlockIndex* blockindex = NULL);
+
+void OverviewPage::updateInformation(){
+    int nBlocks = clientModel->getNumBlocks();
+    int64_t tfork = SOFTFORK1_TIME - GetAdjustedTime();   // 1531612800 = 2018-7-15
+    int tday  = tfork / (60*60*24);
+    int thour = (tfork / (60*60))%24;
+    int tmin  = (tfork / (60))%60;
+    int tsec  = tfork %60;
+    
+    QString algo = "Quark";
+
+    QString txt = tr("<h2>AlphaNode Information</h2>\n"); 
+    if(theme=="dark")
+       txt += tr("<style>span{color:#5ff} a{color:#ff0}.c{color:#faa}</style>");
+    else
+       txt += tr("<style>span{color:#09a} a{color:#aa0}.c{color:#a00}</style>");
+
+    txt += tr("<ul class='info'><li>Current Version: <span> %1</span> </li>").arg(QString::fromStdString(FormatFullVersion())); 
+   
+    if( nBlocks < SOFTFORK1_STARTBLOCK+100){
+       txt += tr("<li>Soft Fork Start Blocks: <span> %1</span> </li>").arg(SOFTFORK1_STARTBLOCK);
+    }
+    if( tfork < 0){
+       algo = "Lyra2Z"; 
+       if(tfork>-1000){
+         txt += tr("<li>Algorithm had changed to Lyra2Z.</li>");  
+       }
+    }else{
+       txt += tr("<li>Algorithm will be changed to Lyra2Z in <span class='c'> %1 days %2h:%3m:%4s </span> </li>").arg(tday).arg(thour).arg(tmin).arg(tsec);        
+    } 
+    
+    double hashrate =GetNetworkHashPS(30,-1).get_real();
+    hashrate = hashrate/1000000;
+
+    txt += tr("<li>Current Blocks: <span> %1</span> </li>").arg(nBlocks); 
+    txt += tr("<li>Difficulty: <span> %1</span> POW Algorithm: <span> %2</span> </li>").arg(GetDifficulty(),0,'g',4).arg(algo); 
+    txt += tr("<li>Network Hash: <span> %3</span> MHash/s </li>").arg(hashrate,0,'f',4); 
+    txt += tr("<li>Connection : <span> %1</span> </li>").arg( clientModel->getNumConnections()); 
+    txt += tr("<li>Master Nodes <span> %1</span><br> </li>").arg( clientModel->getMasternodeCountString()); 
+    txt += tr("<li>Links: <a href='http://www.alphanode.online/'>Website</a>  "); 
+    txt += tr("<a href='http://explorer.alphanode.online/'>Block Explorer</a>  "); 
+    txt += tr("<a href='https://github.com/modcrypto/alphanode/releases'>Download Wallet</a> "); 
+    txt += tr("</li>"); 
+    txt += tr("<li>Socials : "); 
+    txt += tr("<a href='https://discord.gg/xAST2ga'>Discord</a> "); 
+   // txt += tr("<a href='https://twitter.com/btnx_bitnexus'>Twitter</a>"); 
+    txt += tr(" </li></ul>");
+    ui->MessageLabel->setText(txt);    
 }

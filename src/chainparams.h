@@ -73,7 +73,10 @@ public:
     int64_t TargetTimespan() const { return nTargetTimespan; }
     int64_t TargetSpacing() const { return nTargetSpacing; }
     int64_t Interval() const { return nTargetTimespan / nTargetSpacing; }
-    int LAST_POW_BLOCK() const { return nLastPOWBlock; }
+    int LAST_POW_BLOCK() const { 
+        if(strNetworkID=="main") return 500000;
+        return nLastPOWBlock; 
+    }
     int COINBASE_MATURITY() const { return nMaturity; }
     int ModifierUpgradeBlock() const { return nModifierUpdateBlock; }
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
@@ -181,5 +184,6 @@ void SelectParams(CBaseChainParams::Network network);
  * Returns false if an invalid combination is given.
  */
 bool SelectParamsFromCommandLine();
+
 
 #endif // BITCOIN_CHAINPARAMS_H

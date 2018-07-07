@@ -331,4 +331,6 @@ arith_uint256 UintToArith256(const uint256&);
 uint512 ArithToUint512(const arith_uint512&);
 arith_uint512 UintToArith512(const uint512&);
 
+
+
 #endif // BITCOIN_UINT256_H

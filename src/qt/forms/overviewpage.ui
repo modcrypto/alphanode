@@ -19,6 +19,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="topLayout">
    <item>
     <widget class="QLabel" name="labelAlerts">
@@ -121,7 +124,7 @@
                <string notr="true">0.000 000 00 BTC</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -146,7 +149,7 @@
                <string notr="true">0.000 000 00 BTC</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -171,7 +174,7 @@
                <string notr="true">0.000 000 00 BTC</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -229,7 +232,7 @@
                <string notr="true">0.000 000 00 BTC</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -274,7 +277,7 @@
                <string notr="true">0.000 000 00 BTC</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -299,7 +302,7 @@
                <string notr="true">0.000 000 00 BTC</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -312,7 +315,7 @@
                <string>Watch-only:</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -341,7 +344,7 @@
                <string notr="true">0.000 000 00 BTC</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -366,7 +369,7 @@
                <string notr="true">0.000 000 00 BTC</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="textInteractionFlags">
                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -386,7 +389,7 @@
                <string>Spendable:</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -396,11 +399,33 @@
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="frameDarksend">
+        <widget class="QLabel" name="MessageLabel">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>350</height>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="openExternalLinks">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frameDarksend">
+         <property name="minimumSize">
+          <size>
+           <width>451</width>
+           <height>343</height>
           </size>
          </property>
          <property name="layoutDirection">
@@ -416,9 +441,9 @@
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>40</y>
+            <y>51</y>
             <width>451</width>
-            <height>161</height>
+            <height>175</height>
            </rect>
           </property>
           <layout class="QFormLayout" name="formLayout">
@@ -521,10 +546,10 @@
          <widget class="QPushButton" name="runAutoDenom">
           <property name="geometry">
            <rect>
-            <x>251</x>
-            <y>17</y>
-            <width>1</width>
-            <height>1</height>
+            <x>0</x>
+            <y>0</y>
+            <width>0</width>
+            <height>0</height>
            </rect>
           </property>
           <property name="palette">
@@ -958,10 +983,10 @@
          <widget class="QPushButton" name="toggleDarksend">
           <property name="geometry">
            <rect>
-            <x>120</x>
-            <y>250</y>
-            <width>221</width>
-            <height>56</height>
+            <x>115</x>
+            <y>268</y>
+            <width>295</width>
+            <height>40</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -978,9 +1003,9 @@
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>200</y>
-            <width>441</width>
-            <height>16</height>
+            <y>0</y>
+            <width>431</width>
+            <height>35</height>
            </rect>
           </property>
           <property name="orientation">
@@ -990,10 +1015,10 @@
          <widget class="QLabel" name="DarksendStatus">
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>220</y>
-            <width>451</width>
-            <height>61</height>
+            <x>70</x>
+            <y>226</y>
+            <width>395</width>
+            <height>43</height>
            </rect>
           </property>
           <property name="minimumSize">
@@ -1006,7 +1031,7 @@
            <string>(Last Message)</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           <set>Qt::AlignCenter</set>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -1015,10 +1040,10 @@
          <widget class="QPushButton" name="DarksendAuto">
           <property name="geometry">
            <rect>
-            <x>10</x>
-            <y>310</y>
-            <width>221</width>
-            <height>28</height>
+            <x>120</x>
+            <y>314</y>
+            <width>140</width>
+            <height>27</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1037,10 +1062,10 @@
          <widget class="QPushButton" name="DarksendReset">
           <property name="geometry">
            <rect>
-            <x>230</x>
-            <y>310</y>
-            <width>221</width>
-            <height>28</height>
+            <x>265</x>
+            <y>314</y>
+            <width>140</width>
+            <height>27</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1063,9 +1088,9 @@
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>10</y>
+            <y>0</y>
             <width>431</width>
-            <height>22</height>
+            <height>37</height>
            </rect>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -1142,22 +1167,6 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>75</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QLabel" name="label_4">
@@ -1187,7 +1196,7 @@
                <string notr="true">(out of sync)</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
               </property>
              </widget>
             </item>
@@ -1227,22 +1236,6 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </item>

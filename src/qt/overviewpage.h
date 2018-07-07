@@ -40,12 +40,12 @@ public:
 public slots:
     void DarKsendStatus();
     void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, const CAmount& anonymizedBalance, const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
-
+    void updateInformation();
 signals:
     void transactionClicked(const QModelIndex& index);
 
 private:
-    QTimer* timer;
+    QTimer* timer, *timerMsg;
     Ui::OverviewPage* ui;
     ClientModel* clientModel;
     WalletModel* walletModel;

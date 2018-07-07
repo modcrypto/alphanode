@@ -32,7 +32,7 @@ extern map<int64_t, uint256> mapCacheBlockHashes;
 
 bool GetBlockHash(uint256& hash, int nBlockHeight);
 
-
+bool IsValidMasterNodeCollateral(CAmount amnt);
 //
 // The Masternode Ping Class : Contains a different serialize method for sending pings from masternodes throughout the network
 //
@@ -192,7 +192,8 @@ public:
     }
 
     uint256 CalculateScore(int mod = 1, int64_t nBlockHeight = 0);
-
+    uint256 CalculateScoreEx(const uint256& blockHash);
+    
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
@@ -279,6 +280,10 @@ public:
         if (activeState == CMasternode::MASTERNODE_POS_ERROR) strStatus = "POS_ERROR";
 
         return strStatus;
+    }
+    CAmount getCollateralValue();
+    bool isValidCollateral(){
+       return IsValidMasterNodeCollateral(getCollateralValue());   
     }
 
     int64_t GetLastPaid();

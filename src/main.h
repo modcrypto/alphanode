@@ -205,6 +205,8 @@ void UnloadBlockIndex();
 int ActiveProtocol();
 /** Process protocol messages received from a given node */
 bool ProcessMessages(CNode* pfrom);
+
+
 /**
  * Send queued protocol messages to be sent to a give node.
  *
@@ -231,7 +233,7 @@ bool DisconnectBlocksAndReprocess(int blocks);
 
 // ***TODO***
 double ConvertBitsToDouble(unsigned int nBits);
-int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount = 0);
+int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount = 0, CAmount mnCollateral = 0);
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock, bool fProofOfStake);
 
 bool ActivateBestChain(CValidationState& state, CBlock* pblock = NULL);
@@ -258,6 +260,8 @@ int GetInputAge(CTxIn& vin);
 int GetInputAgeIX(uint256 nTXHash, CTxIn& vin);
 bool GetCoinAge(const CTransaction& tx, unsigned int nTxTime, uint64_t& nCoinAge);
 int GetIXConfirmations(uint256 nTXHash);
+
+bool isValidProtocol(int version);
 
 struct CNodeStateStats {
     int nMisbehavior;

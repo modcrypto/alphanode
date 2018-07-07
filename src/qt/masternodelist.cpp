@@ -32,6 +32,7 @@ MasternodeList::MasternodeList(QWidget* parent) : QWidget(parent),
     int columnStatusWidth = 80;
     int columnActiveWidth = 130;
     int columnLastSeenWidth = 130;
+    int columnAmntWidth = 80;
 
     ui->tableWidgetMyMasternodes->setColumnWidth(0, columnAliasWidth);
     ui->tableWidgetMyMasternodes->setColumnWidth(1, columnAddressWidth);
@@ -39,12 +40,14 @@ MasternodeList::MasternodeList(QWidget* parent) : QWidget(parent),
     ui->tableWidgetMyMasternodes->setColumnWidth(3, columnStatusWidth);
     ui->tableWidgetMyMasternodes->setColumnWidth(4, columnActiveWidth);
     ui->tableWidgetMyMasternodes->setColumnWidth(5, columnLastSeenWidth);
+    ui->tableWidgetMyMasternodes->setColumnWidth(7, columnAmntWidth);
 
     ui->tableWidgetMasternodes->setColumnWidth(0, columnAddressWidth);
     ui->tableWidgetMasternodes->setColumnWidth(1, columnProtocolWidth);
     ui->tableWidgetMasternodes->setColumnWidth(2, columnStatusWidth);
     ui->tableWidgetMasternodes->setColumnWidth(3, columnActiveWidth);
     ui->tableWidgetMasternodes->setColumnWidth(4, columnLastSeenWidth);
+    ui->tableWidgetMasternodes->setColumnWidth(6, columnAmntWidth);
 
     ui->tableWidgetMyMasternodes->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -192,6 +195,7 @@ void MasternodeList::updateMyMasternodeInfo(QString strAlias, QString strAddr, C
     GUIUtil::DHMSTableWidgetItem* activeSecondsItem = new GUIUtil::DHMSTableWidgetItem(pmn ? (pmn->lastPing.sigTime - pmn->sigTime) : 0);
     QTableWidgetItem* lastSeenItem = new QTableWidgetItem(QString::fromStdString(DateTimeStrFormat("%Y-%m-%d %H:%M", pmn ? pmn->lastPing.sigTime : 0)));
     QTableWidgetItem* pubkeyItem = new QTableWidgetItem(QString::fromStdString(pmn ? CBitcoinAddress(pmn->pubKeyCollateralAddress.GetID()).ToString() : ""));
+    QTableWidgetItem* amntItem = new QTableWidgetItem(QString::number(pmn ? pmn->getCollateralValue()/COIN:0));
 
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 0, aliasItem);
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 1, addrItem);
@@ -200,6 +204,8 @@ void MasternodeList::updateMyMasternodeInfo(QString strAlias, QString strAddr, C
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 4, activeSecondsItem);
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 5, lastSeenItem);
     ui->tableWidgetMyMasternodes->setItem(nNewRow, 6, pubkeyItem);
+    ui->tableWidgetMyMasternodes->setItem(nNewRow, 7, amntItem);
+
 }
 
 void MasternodeList::updateMyNodeList(bool fForce)
@@ -264,6 +270,7 @@ void MasternodeList::updateNodeList()
         GUIUtil::DHMSTableWidgetItem* activeSecondsItem = new GUIUtil::DHMSTableWidgetItem(mn.lastPing.sigTime - mn.sigTime);
         QTableWidgetItem* lastSeenItem = new QTableWidgetItem(QString::fromStdString(DateTimeStrFormat("%Y-%m-%d %H:%M", mn.lastPing.sigTime)));
         QTableWidgetItem* pubkeyItem = new QTableWidgetItem(QString::fromStdString(CBitcoinAddress(mn.pubKeyCollateralAddress.GetID()).ToString()));
+        QTableWidgetItem* amntItem = new QTableWidgetItem(QString::number(mn.getCollateralValue()/COIN));
 
         if (strCurrentFilter != "") {
             strToFilter = addressItem->text() + " " +
@@ -271,7 +278,8 @@ void MasternodeList::updateNodeList()
                           statusItem->text() + " " +
                           activeSecondsItem->text() + " " +
                           lastSeenItem->text() + " " +
-                          pubkeyItem->text();
+                          pubkeyItem->text()+ " " +
+                          amntItem->text();
             if (!strToFilter.contains(strCurrentFilter)) continue;
         }
 
@@ -282,6 +290,7 @@ void MasternodeList::updateNodeList()
         ui->tableWidgetMasternodes->setItem(0, 3, activeSecondsItem);
         ui->tableWidgetMasternodes->setItem(0, 4, lastSeenItem);
         ui->tableWidgetMasternodes->setItem(0, 5, pubkeyItem);
+        ui->tableWidgetMasternodes->setItem(0, 6, amntItem);
     }
 
     ui->countLabel->setText(QString::number(ui->tableWidgetMasternodes->rowCount()));

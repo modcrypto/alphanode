@@ -286,21 +286,39 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFe
 
     bool hasPayment = true;
     CScript payee;
-
-    //spork
-    if (!masternodePayments.GetBlockPayee(pindexPrev->nHeight + 1, payee)) {
-        //no masternode detected
-        CMasternode* winningNode = mnodeman.GetCurrentMasterNode(1);
-        if (winningNode) {
-            payee = GetScriptForDestination(winningNode->pubKeyCollateralAddress.GetID());
-        } else {
+    CAmount masternodeCoin=0;
+    
+    if(!masternodePayments.GetBlockPayee(pindexPrev->nHeight+1, payee)) {
+        // no masternode detected...
+        int nCount = 0;
+        CMasternode *winningNode = mnodeman.GetCurrentMasterNode(1);
+        if(!winningNode) {
             LogPrintf("CreateNewBlock: Failed to detect masternode to pay\n");
             hasPayment = false;
+        }else{
+           // fill payee with locally calculated winner and hope for the best
+           payee = GetScriptForDestination(winningNode->pubKeyCollateralAddress.GetID());
+           masternodeCoin = winningNode->getCollateralValue();
         }
-    }
+    }else{
+       CMasternode *winningNode= NULL;
+       winningNode = mnodeman.Find(payee);    
+       if(!winningNode) {
+          int nCount = 0;
+          winningNode = mnodeman.GetCurrentMasterNode(1);
+          payee = GetScriptForDestination(winningNode->pubKeyCollateralAddress.GetID());
+       }
+       if(!winningNode) {
+           LogPrintf("CMasternodePayments::FillBlockPayee -- Failed to detect masternode to pay\n");
+           hasPayment = false;
+       }else{
+          masternodeCoin = winningNode->getCollateralValue();   
+       }
+    }    
+
 
     CAmount blockValue = GetBlockValue(pindexPrev->nHeight +1 );
-    CAmount masternodePayment = GetMasternodePayment(pindexPrev->nHeight +1, blockValue);
+    CAmount masternodePayment = GetMasternodePayment(pindexPrev->nHeight +1, blockValue, mnodeman.stable_size(), masternodeCoin);
 	
 	//TEMPORARY FIX
 	if(pindexPrev->nHeight +1 > 151200 && pindexPrev->nHeight +1 <= 152500) {

@@ -1008,6 +1008,13 @@ void BitcoinGUI::message(const QString& title, const QString& message, unsigned 
 
     QString msgType;
 
+    QDateTime lastBlockDate = clientModel->getLastBlockDate();
+    QDateTime currentDate = QDateTime::currentDateTime();
+    int secs = lastBlockDate.secsTo(currentDate);
+    if(secs>1000 && style==CClientUIInterface::MSG_INFORMATION){
+      return;
+    }
+
     // Prefer supplied title over style based title
     if (!title.isEmpty()) {
         msgType = title;
