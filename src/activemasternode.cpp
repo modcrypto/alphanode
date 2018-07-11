@@ -7,6 +7,7 @@
 #include "protocol.h"
 #include "spork.h"
 #include "chainparams.h"
+#include "main.h"
 
 
 // Bootup the Masternode, look for a 10000 ALN input and register on the network

@@ -636,4 +636,7 @@ protected:
     friend void ::UnregisterAllValidationInterfaces();
 };
 */
+
+bool isValidProtocol(int version);
+
 #endif // BITCOIN_MAIN_H
