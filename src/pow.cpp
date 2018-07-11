@@ -31,7 +31,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMin) {
         return Params().ProofOfWorkLimit().GetCompact();
     }
-    
+
 	// Proof of Stake
     if (pindexLast->nHeight > Params().LAST_POW_BLOCK()) {
         uint256 bnTargetLimit = (~uint256(0) >> 20);
@@ -62,6 +62,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     }
 
 	
+	
+	
     for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
         if (PastBlocksMax > 0 && i > PastBlocksMax) {
             break;
@@ -89,7 +91,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         }
         BlockReading = BlockReading->pprev;
     }
- 
+
     uint256 bnNew(PastDifficultyAverage);
 
     int64_t _nTargetTimespan = CountBlocks * Params().TargetSpacing();
@@ -103,26 +105,26 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     bnNew *= nActualTimespan;
     bnNew /= _nTargetTimespan;
 	
-	
-	//if (pindexLast->nHeight <= Params().LAST_POW_BLOCK()) bnNew = Params().ProofOfWorkLimit();
 
     int64_t forktime = SOFTFORK1_TIME;
     int64_t CurBlockTime = pblock->GetBlockTime();
     LastBlockTime = pindexLast->GetBlockTime();
     bool firstLyra2Z =  (LastBlockTime <= forktime+10) && (CurBlockTime >= forktime);   
-    
+   
     if(firstLyra2Z){
         bnNew = Params().ProofOfWorkLimit()/500;
         LogPrintf("This is the first Lyra2Z. \n");
     }
 	
+	//if (pindexLast->nHeight <= Params().LAST_POW_BLOCK()) bnNew = Params().ProofOfWorkLimit();
+	
     if (bnNew > Params().ProofOfWorkLimit()) {
         bnNew = Params().ProofOfWorkLimit();
-        LogPrintf(" bnNew > Params().ProofOfWorkLimit()\n");
     }
 
+    
 	LogPrintf("GetNextWorkRequired RETARGET\n");
-    LogPrintf("nActualTimespan = %d  Target = %d \n", nActualTimespan, _nTargetTimespan);
+    LogPrintf("nActualTimespan = %d\n", nActualTimespan);
     LogPrintf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.ToString());
 	
     return bnNew.GetCompact();

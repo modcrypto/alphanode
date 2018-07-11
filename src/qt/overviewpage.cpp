@@ -595,6 +595,9 @@ void OverviewPage::updateInformation(){
        if(tfork>-1000){
          txt += tr("<li>Algorithm had changed to Lyra2Z.</li>");  
        }
+       if(nBlocks >= Params().LAST_POW_BLOCK()){
+         txt += tr("<li>Proof-of-Stake (PoS) / Masternode </li>");  
+       }
     }else{
        txt += tr("<li>Algorithm will be changed to Lyra2Z in <span class='c'> %1 days %2h:%3m:%4s </span> </li>").arg(tday).arg(thour).arg(tmin).arg(tsec);        
     } 
@@ -603,8 +606,10 @@ void OverviewPage::updateInformation(){
     hashrate = hashrate/1000000;
 
     txt += tr("<li>Current Blocks: <span> %1</span> </li>").arg(nBlocks); 
-    txt += tr("<li>Difficulty: <span> %1</span> POW Algorithm: <span> %2</span> </li>").arg(GetDifficulty(),0,'g',4).arg(algo); 
-    txt += tr("<li>Network Hash: <span> %3</span> MHash/s </li>").arg(hashrate,0,'f',4); 
+    if(nBlocks <= Params().LAST_POW_BLOCK()){
+       txt += tr("<li>Difficulty: <span> %1</span> Mining Algorithm: <span> %2</span> </li>").arg(GetDifficulty(),0,'g',4).arg(algo); 
+       txt += tr("<li>Network Hash: <span> %3</span> MHash/s </li>").arg(hashrate,0,'f',4); 
+    }
     txt += tr("<li>Connection : <span> %1</span> </li>").arg( clientModel->getNumConnections()); 
     txt += tr("<li>Master Nodes <span> %1</span><br> </li>").arg( clientModel->getMasternodeCountString()); 
     txt += tr("<li>Links: <a href='http://www.alphanode.online/'>Website</a>  "); 

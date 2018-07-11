@@ -2111,8 +2111,7 @@ bool CDarKsendSigner::IsVinAssociatedWithPubkey(CTxIn& vin, CPubKey& pubkey)
     uint256 hash;
     if (GetTransaction(vin.prevout.hash, txVin, hash, true)) {
         BOOST_FOREACH (CTxOut out, txVin.vout) {
-            //if (out.nValue == Params().MasternodeColleteralLimxDev() * COIN) {
-            if( IsValidMasterNodeCollateral(out.nValue)){
+            if (IsValidMasterNodeCollateral(out.nValue)) {
                 if (out.scriptPubKey == payee2) return true;
             }
         }

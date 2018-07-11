@@ -31,8 +31,8 @@ class CMasternodePing;
 extern map<int64_t, uint256> mapCacheBlockHashes;
 
 bool GetBlockHash(uint256& hash, int nBlockHeight);
-
 bool IsValidMasterNodeCollateral(CAmount amnt);
+
 //
 // The Masternode Ping Class : Contains a different serialize method for sending pings from masternodes throughout the network
 //
@@ -192,8 +192,7 @@ public:
     }
 
     uint256 CalculateScore(int mod = 1, int64_t nBlockHeight = 0);
-    uint256 CalculateScoreEx(const uint256& blockHash);
-    
+
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
@@ -281,13 +280,15 @@ public:
 
         return strStatus;
     }
+
+    int64_t GetLastPaid();
+    bool IsValidNetAddr();
+
     CAmount getCollateralValue();
     bool isValidCollateral(){
        return IsValidMasterNodeCollateral(getCollateralValue());   
     }
-
-    int64_t GetLastPaid();
-    bool IsValidNetAddr();
+     uint256 CalculateScoreEx(const uint256& blockHash);
 };
 
 
@@ -335,5 +336,6 @@ public:
     static bool Create(CTxIn vin, CService service, CKey keyCollateralAddressNew, CPubKey pubKeyCollateralAddressNew, CKey keyMasternodeNew, CPubKey pubKeyMasternodeNew, std::string& strErrorRet, CMasternodeBroadcast& mnbRet);
     static bool Create(std::string strService, std::string strKey, std::string strTxHash, std::string strOutputIndex, std::string& strErrorRet, CMasternodeBroadcast& mnbRet, bool fOffline = false);
 };
+
 
 #endif

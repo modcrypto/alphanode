@@ -288,6 +288,7 @@ crypto_libbitcoin_crypto_a_SOURCES = \
   crypto/sph_types.h
 
 # lyra2z
+
 crypto_libbitcoin_crypto_a_SOURCES += \
   crypto/lyra2z/lyra2.c \
   crypto/lyra2z/lyra2.h \

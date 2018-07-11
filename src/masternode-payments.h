@@ -31,6 +31,7 @@ bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight);
 std::string GetRequiredPaymentsString(int nBlockHeight);
 bool IsBlockValueValid(const CBlock& block, int64_t nExpectedValue, CAmount nMinted);
 void FillBlockPayee(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake);
+
 void DumpMasternodePayments();
 
 /** Save Masternode Payment Data (mnpayments.dat)
@@ -144,7 +145,7 @@ public:
         return false;
     }
 
-    bool IsTransactionValid(const CTransaction& txNew);
+    bool IsTransactionValid(const CTransaction& txNew, int64_t nTime);
     std::string GetRequiredPaymentsString();
 
     ADD_SERIALIZE_METHODS;
@@ -261,7 +262,7 @@ public:
     int LastPayment(CMasternode& mn);
 
     bool GetBlockPayee(int nBlockHeight, CScript& payee);
-    bool IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
+    bool IsTransactionValid(const CTransaction& txNew, int nBlockHeight,int64_t nTime);
     bool IsScheduled(CMasternode& mn, int nNotBlockHeight);
 
     bool CanVote(COutPoint outMasternode, int nBlockHeight)

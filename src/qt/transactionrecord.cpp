@@ -97,7 +97,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
                 }
 				
 				int nHeight = chainActive.Height();
-				int64_t nSubsidy  = GetBlockValue(nHeight);
+				int64_t nSubsidy  = GetBlockValue(nHeight,0);
                 int64_t nMN1  = GetMasternodePayment(nHeight,nSubsidy,1,10000*COIN);
                 int64_t nMN2  = GetMasternodePayment(nHeight,nSubsidy,1,50000*COIN);
                 int64_t nMN3  = GetMasternodePayment(nHeight,nSubsidy,1,100000*COIN);

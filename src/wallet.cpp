@@ -1458,16 +1458,13 @@ void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const
                 if (nCoinType == ONLY_DENOMINATED) {
                     found = IsDenominatedAmount(pcoin->vout[i].nValue);
                 } else if (nCoinType == ONLY_NOT10000IFMN) {
-                    //pcoin->vout[i].nValue == Params().MasternodeColleteralLimxDev() * COIN
-                    found = !(fMasterNode && IsValidMasterNodeCollateral(pcoin->vout[i].nValue)) ;
+                    found = !(fMasterNode && IsValidMasterNodeCollateral(pcoin->vout[i].nValue));
                 } else if (nCoinType == ONLY_NONDENOMINATED_NOT10000IFMN) {
                     if (IsCollateralAmount(pcoin->vout[i].nValue)) continue; // do not use collateral amounts
                     found = !IsDenominatedAmount(pcoin->vout[i].nValue);
-                    if (found && fMasterNode)
-                     found = !IsValidMasterNodeCollateral(pcoin->vout[i].nValue); 
-                     //pcoin->vout[i].nValue != Params().MasternodeColleteralLimxDev() * COIN; // do not use Hot MN funds
+                    if (found && fMasterNode) found = !IsValidMasterNodeCollateral(pcoin->vout[i].nValue); // do not use Hot MN funds
                 } else if (nCoinType == ONLY_10000) {
-                    found = IsValidMasterNodeCollateral(pcoin->vout[i].nValue); // pcoin->vout[i].nValue == Params().MasternodeColleteralLimxDev() * COIN;
+                    found = IsValidMasterNodeCollateral(pcoin->vout[i].nValue);
                 } else {
                     found = true;
                 }
@@ -1899,8 +1896,6 @@ bool CWallet::SelectCoinsDark(CAmount nValueMin, CAmount nValueMax, std::vector<
         if (out.tx->vout[out.i].nValue < CENT) continue;
         //do not allow collaterals to be selected
         if (IsCollateralAmount(out.tx->vout[out.i].nValue)) continue;
-        
-        //if (fMasterNode && out.tx->vout[out.i].nValue == Params().MasternodeColleteralLimxDev() * COIN) continue; //masternode input
         if (fMasterNode && IsValidMasterNodeCollateral(out.tx->vout[out.i].nValue)) continue; //masternode input
 
         if (nValueRet + out.tx->vout[out.i].nValue <= nValueMax) {
@@ -2433,7 +2428,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
             //presstab HyperStake - calculate the total size of our new output including the stake reward so that we can use it to decide whether to split the stake outputs
             const CBlockIndex* pIndex0 = chainActive.Tip();
-            uint64_t nTotalSize = pcoin.first->vout[pcoin.second].nValue + GetBlockValue(pIndex0->nHeight);
+            uint64_t nTotalSize = pcoin.first->vout[pcoin.second].nValue + GetBlockValue(pIndex0->nHeight, pIndex0->nTime);
 
             //presstab HyperStake - if MultiSend is set to send in coinstake we will add our outputs here (values asigned further down)
             if (nTotalSize / 2 > nStakeSplitThreshold * COIN)
@@ -2453,7 +2448,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     // Calculate reward
     uint64_t nReward;
     const CBlockIndex* pIndex0 = chainActive.Tip();
-    nReward = GetBlockValue(pIndex0->nHeight);
+    nReward = GetBlockValue(pIndex0->nHeight, pIndex0->nTime);
     nCredit += nReward;
 
     int64_t nMinFee = 0;

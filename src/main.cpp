@@ -1617,8 +1617,7 @@ double ConvertBitsToDouble(unsigned int nBits)
 
     return dDiff;
 }
-
-int64_t GetBlockValue(int nHeight)
+int64_t GetBlockValue(int nHeight,int64_t nTime)
 {
  
     if (Params().NetworkID() == CBaseChainParams::TESTNET) {
@@ -1648,20 +1647,18 @@ int64_t GetBlockValue(int nHeight)
        if(nHeight > SOFTFORK1_STARTBLOCK+830000)   nSubsidy = 10 * COIN;
        if(nHeight > SOFTFORK1_STARTBLOCK+930000)   nSubsidy = 5  * COIN;
        
-       int64_t nTime = GetAdjustedTime();
+       if(nTime==0) nTime = GetAdjustedTime();
        if(nTime < SOFTFORK1_TIME) nSubsidy = 40 * COIN;
-       if(nTime >= SOFTFORK1_TIME && nTime <= SOFTFORK1_TIME + 60*60*6){
-        nSubsidy = 500 * COIN;
+       if(nTime >= SOFTFORK1_TIME && nTime <= SOFTFORK1_TIME + 60*60){  // 1 hour
+          nSubsidy = 500 * COIN;
        }
-    }    
-    
+    }        
     return nSubsidy;
 
 }
 
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount, CAmount nMasternodeCoin)
 {
-
 
     if (Params().NetworkID() == CBaseChainParams::TESTNET) {
         if (nHeight < 200)
@@ -1678,60 +1675,17 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
         ret = blockValue / 100 * 20;
 	} else if (nHeight > 152500 && nHeight <= 302400) {
         ret = blockValue / 100 * 30;
-    }
-    /*    
-	} else if (nHeight > 302400 && nHeight <= 345600) {
-        ret = blockValue / 100 * 35;
-	} else if (nHeight > 345600 && nHeight <= 388800) {
-        ret = blockValue / 100 * 40;
-	} else if (nHeight > 388800 && nHeight <= 475200) {
-        ret = blockValue / 100 * 40;
-	} else 
-    */
+    }    
     if (nHeight > SOFTFORK1_STARTBLOCK){
        ret = blockValue/100*10;
        if(nMasternodeCoin==50000*COIN)  ret = blockValue/100*30;
        if(nMasternodeCoin==100000*COIN) ret = blockValue/100*50;       
     }
-
 /*
     Level 1 - requires    10,000 ALN  MasterNode Reward  10% 
     Level 2 - requires    50,000 ALN  MasterNode Reward  30%
     Level 3 - requires   100,000 ALN  MasterNode Reward  50%
 */
-/*       
-    // We had change to multiple-level masternodes
-    if (nHeight > 500000) {		
-		int64_t nMoneySupply = chainActive.Tip()->nMoneySupply;
-		
-		if(nMasternodeCount < 1) {
-			nMasternodeCount = mnodeman.stable_size();
-		}
-		
-		int64_t mNodeCoins = nMasternodeCount * 10000 * COIN;
-		
-		if (mNodeCoins == 0) {
-            ret = 0;
-		} else {
-			double lockedCoinValue = mNodeCoins / nMoneySupply;
-			
-			
-			double masternodeMultiplier = 1 - lockedCoinValue;
-			
-			if(masternodeMultiplier < .1) {
-				masternodeMultiplier = .1;
-			} else if(masternodeMultiplier > .9) {
-				masternodeMultiplier = .9;
-			}
-			
-			LogPrintf("[LIBRA] Adjusting Libra at height %d with %d masternodes (%d % locked ALN) and %d ALN supply at %ld\n", nHeight, nMasternodeCount, lockedCoinValue*100, nMoneySupply, GetTime());
-			LogPrintf("[LIBRA] Masternode: %d\n", masternodeMultiplier*100);
-			LogPrintf("[LIBRA] Staker: %d\n", (1 - masternodeMultiplier)*100);
-			
-			ret = blockValue * masternodeMultiplier;
-		}		
-	}
-	*/
 	return ret;
 }
 
@@ -1833,9 +1787,8 @@ void Misbehaving(NodeId pnode, int howmuch)
     CNodeState* state = State(pnode);
     if (state == NULL)
         return;
-    // for test
-    int64_t t=GetAdjustedTime();
-    if(t>=SOFTFORK1_TIME+10000) state->nMisbehavior += howmuch;
+
+    state->nMisbehavior += howmuch;
     int banscore = GetArg("-banscore", 100);
     if (state->nMisbehavior >= banscore && state->nMisbehavior - howmuch < banscore) {
         LogPrintf("Misbehaving: %s (%d -> %d) BAN THRESHOLD EXCEEDED\n", state->name, state->nMisbehavior - howmuch, state->nMisbehavior);
@@ -2266,7 +2219,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     pindex->nMint = nValueOut - nValueIn + nFees;
     pindex->nMoneySupply = nMoneySupplyPrev + nValueOut - nValueIn;
 
-    CAmount nExpectedMint = GetBlockValue(pindex->pprev->nHeight);
+    CAmount nExpectedMint = GetBlockValue(pindex->pprev->nHeight, pindex->pprev->nTime);
     if (pindex->pprev->nHeight > 4200 && !IsBlockValueValid(block, nExpectedMint, pindex->nMint)) {
         return state.DoS(100,
             error("ConnectBlock() : reward pays too much (actual=%s vs limit=%s)",
@@ -5474,11 +5427,13 @@ int ActiveProtocol()
 
     // SPORK_15 is used for 70910. Nodes < 70910 don't see it and still get their protocol version via SPORK_14 and their 
     // own ModifierUpgradeBlock()
-    if (GetHeight()> SOFTFORK1_STARTBLOCK-15) return MIN_PEER_PROTO_VERSION_AFTER_SOFTFORK;
- 
+
+    if ( chainActive.Tip()->nHeight > SOFTFORK1_STARTBLOCK-15) 
+       return MIN_PEER_PROTO_VERSION_AFTER_SOFTFORK;
+
     if (IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
             return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-  
+
     return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }
 
@@ -5895,9 +5850,6 @@ public:
         mapOrphanTransactionsByPrev.clear();
     }
 } instance_of_cmaincleanup;
-
-
-
 
 bool isValidProtocol(int version){
     if(GetHeight()>SOFTFORK1_STARTBLOCK-15){

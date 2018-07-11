@@ -246,7 +246,7 @@ bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight)
     }
 
     //check for masternode payee
-    if (masternodePayments.IsTransactionValid(txNew, nBlockHeight))
+    if (masternodePayments.IsTransactionValid(txNew, nBlockHeight,block.nTime))
         return true;
     LogPrintf("Invalid mn payment detected %s\n", txNew.ToString().c_str());
 
@@ -317,7 +317,7 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFe
     }    
 
 
-    CAmount blockValue = GetBlockValue(pindexPrev->nHeight +1 );
+    CAmount blockValue = GetBlockValue(pindexPrev->nHeight +1 , pindexPrev->nTime );
     CAmount masternodePayment = GetMasternodePayment(pindexPrev->nHeight +1, blockValue, mnodeman.stable_size(), masternodeCoin);
 	
 	//TEMPORARY FIX
@@ -536,7 +536,7 @@ bool CMasternodePayments::AddWinningMasternode(CMasternodePaymentWinner& winnerI
     return true;
 }
 
-bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
+bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew, int64_t nTime)
 {
     LOCK(cs_vecPayments);
 
@@ -544,7 +544,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
 	int nMasternode_Drift_Count = 0;
     std::string strPayeesPossible = "";
 
-    CAmount nReward = GetBlockValue(nBlockHeight);
+    CAmount nReward = GetBlockValue(nBlockHeight, nTime);
 
     if (IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
         // Get a stable number of masternodes by ignoring newly activated (< 8000 sec old) masternodes
@@ -557,7 +557,8 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
         nMasternode_Drift_Count = mnodeman.size() + Params().MasternodeCountDrift();
     }
 
-	CAmount requiredMasternodePayment = GetMasternodePayment(nBlockHeight, nReward, nMasternode_Drift_Count);
+    CAmount level1 = 10000 * COIN;
+	CAmount requiredMasternodePayment = GetMasternodePayment(nBlockHeight, nReward, nMasternode_Drift_Count, level1);
 
     //require at least 6 signatures
     BOOST_FOREACH (CMasternodePayee& payee, vecPayments)
@@ -629,12 +630,12 @@ std::string CMasternodePayments::GetRequiredPaymentsString(int nBlockHeight)
     return "Unknown";
 }
 
-bool CMasternodePayments::IsTransactionValid(const CTransaction& txNew, int nBlockHeight)
+bool CMasternodePayments::IsTransactionValid(const CTransaction& txNew, int nBlockHeight, int64_t nTime)
 {
     LOCK(cs_mapMasternodeBlocks);
 
     if (mapMasternodeBlocks.count(nBlockHeight)) {
-        return mapMasternodeBlocks[nBlockHeight].IsTransactionValid(txNew);
+        return mapMasternodeBlocks[nBlockHeight].IsTransactionValid(txNew, nTime);
     }
 
     return true;

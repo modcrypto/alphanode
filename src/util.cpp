@@ -424,7 +424,7 @@ boost::filesystem::path GetDefaultDataDir()
 // Unix: ~/.alphanode
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "AlphanodeTest";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Alphanode";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
