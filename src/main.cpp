@@ -5852,9 +5852,5 @@ public:
 } instance_of_cmaincleanup;
 
 bool isValidProtocol(int version){
-    if(GetHeight()>SOFTFORK1_STARTBLOCK-15){
-        return version >= PROTOCOL_VERSION; 
-    }else{
-        return version >= 70712; 
-    }
+   return version >= ActiveProtocol(); 
 }
