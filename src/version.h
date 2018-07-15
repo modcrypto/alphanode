@@ -11,10 +11,10 @@
 /**
  * network protocol versioning
  */
-static const int SOFTFORK1_STARTBLOCK = 175000;        //143880
-static const int SOFTFORK1_TIME       = 1532736000;    //28-07-2018 00:00:00
-static const int PROTOCOL_P2P_PORT = 2214; // 2214
-static const int PROTOCOL_VERSION = 70714;
+static const int SOFTFORK1_STARTBLOCK = 225000;        //143880
+static const int SOFTFORK1_TIME       = 1535673600;    //(31-08-2018)     //1532736000;    //28-07-2018 00:00:00
+static const int PROTOCOL_P2P_PORT    = 2214; // 2214
+static const int PROTOCOL_VERSION     = 70714;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
@@ -29,14 +29,14 @@ static const int MIN_PEER_PROTO_VERSION_AFTER_SOFTFORK     = 70714;
 
 //! nTime field added to CAddress, starting with this version;
 //! if possible, avoid requesting addresses nodes older than this
-static const int CADDR_TIME_VERSION = 31402;
+static const int CADDR_TIME_VERSION   = 31402;
 
 //! only request blocks from nodes outside this range of versions
 static const int NOBLKS_VERSION_START = 32000;
-static const int NOBLKS_VERSION_END = 32400;
+static const int NOBLKS_VERSION_END   = 32400;
 
 //! BIP 0031, pong message, is enabled for all versions AFTER this one
-static const int BIP0031_VERSION = 60000;
+static const int BIP0031_VERSION    = 60000;
 
 //! "mempool" command, enhanced "getdata" behavior starts with this version
 static const int MEMPOOL_GD_VERSION = 60002;
