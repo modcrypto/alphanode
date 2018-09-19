@@ -25,7 +25,7 @@ public:
     /** Type filter bit field (all types) */
     static const quint32 ALL_TYPES = 0xFFFFFFFF;
     /** Type filter bit field (all types but Darksend-SPAM) */
-    static const quint32 COMMON_TYPES = 4479;
+    static const quint32 COMMON_TYPES = 17919; // ‭00 0100 0101 1111 11‬11
 
     static quint32 TYPE(int type) { return 1 << type; }
 

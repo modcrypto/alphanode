@@ -568,6 +568,7 @@ void OverviewPage::toggleDarksend()
 
 extern json_spirit::Value GetNetworkHashPS(int lookup, int height);
 extern double GetDifficulty(const CBlockIndex* blockindex = NULL);
+extern json_spirit::Value GetAvgBlockTime(int lookup, int height);
 
 void OverviewPage::updateInformation(){
     int nBlocks = clientModel->getNumBlocks();
@@ -576,7 +577,8 @@ void OverviewPage::updateInformation(){
     int thour = (tfork / (60*60))%24;
     int tmin  = (tfork / (60))%60;
     int tsec  = tfork %60;
-    
+    int64_t  LastBlockDate = chainActive.Tip()->GetBlockTime();
+    int64_t  nBlockTime = GetAvgBlockTime(30,-1).get_int64();
     QString algo = "Quark";
 
     QString txt = tr("<h2>AlphaNode Information</h2>\n"); 
@@ -605,7 +607,7 @@ void OverviewPage::updateInformation(){
     double hashrate =GetNetworkHashPS(30,-1).get_real();
     hashrate = hashrate/1000000;
 
-    txt += tr("<li>Current Blocks: <span> %1</span> </li>").arg(nBlocks); 
+    txt += tr("<li>Current Blocks: <span> %1</span> Average Block Time: <span> %2</span> sec</li>").arg(nBlocks).arg(nBlockTime); 
     if(nBlocks <= Params().LAST_POW_BLOCK()){
        txt += tr("<li>Difficulty: <span> %1</span> Mining Algorithm: <span> %2</span> </li>").arg(GetDifficulty(),0,'g',4).arg(algo); 
        txt += tr("<li>Network Hash: <span> %3</span> MHash/s </li>").arg(hashrate,0,'f',4); 
