@@ -555,7 +555,9 @@ Value masternodelist(const Array& params, bool fHelp)
                 addrStream << setw(21) << strVin;
 
                 std::ostringstream stringStream;
-                stringStream << setw(9) << mn.Status() << " " << mn.protocolVersion << " " << CBitcoinAddress(mn.pubKeyCollateralAddress.GetID()).ToString() << " " << setw(21) << mn.addr.ToString() << " " << (int64_t)mn.lastPing.sigTime << " " << setw(8) << (int64_t)(mn.lastPing.sigTime - mn.sigTime) << " " << (int64_t)mn.GetLastPaid();
+                stringStream << setw(9) << mn.Status() << " " << mn.protocolVersion << " " << CBitcoinAddress(mn.pubKeyCollateralAddress.GetID()).ToString() 
+                             << " " << setw(21) << mn.addr.ToString() << " " << (int64_t)mn.lastPing.sigTime << " " 
+                             << setw(8) << (int64_t)(mn.lastPing.sigTime - mn.sigTime) << " " << (int64_t)mn.GetLastPaid() << " " << mn.getCollateralValue();
                 std::string output = stringStream.str();
                 stringStream << " " << strVin;
                 if (strFilter != "" && stringStream.str().find(strFilter) == string::npos &&
