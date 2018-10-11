@@ -271,7 +271,7 @@ bool CActiveMasternode::Register(std::string strService, std::string strKeyMaste
             return false;
         }
     } else if (service.GetPort() == PROTOCOL_P2P_PORT) {
-        errorMessage = strprintf("Invalid port %u for masternode %s - %d is only supported on mainnet.", service.GetPort(), strService), PROTOCOL_P2P_PORT;
+        errorMessage = strprintf("Invalid port %u for masternode %s - %d is only supported on mainnet.", service.GetPort(), strService, PROTOCOL_P2P_PORT);
         LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);
         return false;
     }
