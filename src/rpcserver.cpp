@@ -93,7 +93,14 @@ static inline int64_t roundint64(double d)
 
 CAmount AmountFromValue(const Value& value)
 {
-    double dAmount = value.get_real();
+    double dAmount = 0;
+    if(value.type()==str_type){
+      if(!ParseDouble(value.get_str(), &dAmount)){
+        throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount");
+      } 
+    }else{
+      dAmount = value.get_real();
+    }
     if (dAmount <= 0.0 || dAmount > 21000000.0)
         throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount");
     CAmount nAmount = roundint64(dAmount * COIN);
