@@ -1,5 +1,5 @@
 ---
-name: "alphanode-rpi2-2.1.7"
+name: "alphanode-rpi2-3.0.0"
 enable_cache: true
 suites:
 - "trusty"
@@ -18,9 +18,9 @@ packages:
 - "binutils-gold"
 - "ca-certificates"
 - "python"
-reference_datetime: "2015-06-01 00:00:00"
+reference_datetime: "2018-10-01 00:00:00"
 remotes:
-- "url": "https://github.com/ALPHANODE/ALN.git"
+- "url": "https://github.com/modcrypto/alphanode.git"
   "dir": "alphanode"
 files:
 - "raspberrypi-tools.tar.gz"
@@ -28,9 +28,10 @@ script: |
   WRAP_DIR=$HOME/wrapped
   HOSTS="arm-linux-gnueabihf"
   CONFIGFLAGS="--enable-upnp-default --enable-glibc-back-compat"
+  CONFIGFLAGS+=" --disable-tests"
   FAKETIME_HOST_PROGS=""
   FAKETIME_PROGS="date ar ranlib nm strip"
-  
+
   tar --warning=no-timestamp -xzf raspberrypi-tools.tar.gz
   export TOOLCHAIN_BIN=$(pwd)/raspberrypi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin
   export PATH=$PATH:$TOOLCHAIN_BIN
